@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="fullcalendar.min.css">
+    <style>
+        /* @media only screen and (max-width: 767px) {
+            div.col-xs-12 {
+                height:150px;
+                width: auto;
+            } } */
+            .bg {
+                background-color: papayawhip;
+            }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div style="background-color:#fff;margin-top:10px;" id="calendar"></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="moment.min.js"></script>
+    <script src="fullcalendar.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(function(){
+            $("#calendar").fullCalendar({
+                header: {left: 'prev, next, today',
+                center:'addEventButton',
+                right: 'month, agendaDay'
+                },
+                views: {
+                    month: {
+                        titleFormat: 'DD, MM, YYYY'
+                    }
+                },
+                navLinks:true,
+
+                navLinkDayClick: function(date, jsEvent){
+                    var clickedDate = date.format();
+                    console.log(`clicked date is ${date.format()}`);
+                    console.log('day', date.format());
+                },
+                events:[
+                    {
+                        title  : 'iQuant 1.0',
+                        start  : '2019-02-15',
+                        end: '2019-02-17',
+                        url: 'https://www.hiddenramp.com/iquant'
+                    }
+                ],
+                eventRender: function(events, element) {
+                $(element).tooltip({title: events.title});
+                },
+                eventClick: function(event){
+                    if(event.url){
+                        window.open(event.url);
+                        return false;
+                    }
+                },
+                customButtons:{
+                    addEventButton:{
+                        text: 'Add Event',
+                        click:function(){
+                            var dateString = prompt('Please Enter a Date in YYYY-MM-DD format');
+                            var newEventDate = moment(dateString);
+                            var eventTitle = prompt('Please provide title for the event');
+                            var eventString = eventTitle.toString().toLocaleUpperCase();
+                            
+                            console.log(eventString);
+                            if(newEventDate.isValid()){
+                                $("#calendar").fullCalendar('renderEvent',{
+                                    title: eventString,
+                                    start: newEventDate,
+                                    allDay: true,
+
+                                });
+                                alert('Wait, We are adding new event');
+                            }else {
+                                alert('invalid date');
+                            }
+                        }
+                    }
+                }
+            });
+            
+        })
+
+    </script>
+</body>
+
+</html>
